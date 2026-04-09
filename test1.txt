@@ -1,0 +1,207 @@
+Experiment 11
+
+mvn -version
+mvn archetype:generate
+maven-archetype-quickstart
+com.devops.lab
+lab11-junit
+<Press Enter for version>
+com.devops.lab
+Y
+cd lab11-junit
+mvn compile
+mvn clean test
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin <repository-url>
+git branch -M main
+git push -u origin main
+mvn clean compile
+mvn test
+
+
+Experiment 12
+
+mvn -version
+mvn archetype:generate
+maven-archetype-quickstart
+com.bnmit
+sample-app
+<Press Enter for version>
+com.bnmit
+Y
+cd sample-app
+mvn compile
+mvn package
+mvn clean test
+mvn clean test
+
+Experiment 13
+✅ ✅ EXPERIMENT 13
+Integrating JUnit with Jenkins (GitHub CI)
+🔹 PART 1 – Maven Project Creation & Local Testing
+
+mvn -version
+mvn archetype:generate -DgroupId=com.bnmit -DartifactId=sample-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+cd sample-app
+mvn clean test
+Expected Output:
+
+Tests run: 1
+Failures: 0
+BUILD SUCCESS
+🔹 PART 2 – Push Project to GitHub
+
+git init
+git add .
+git commit -m "Initial commit - Maven JUnit project"
+git branch -M main
+git remote add origin https://github.com/USERNAME/sample-app.git
+git push -u origin main
+🔹 PART 3 – Jenkins Maven Execution
+In Jenkins (Maven Project Job), under Goals and Options, enter:
+
+package
+Internally Jenkins runs:
+
+mvn package
+Which automatically performs:
+compile
+test
+package
+🔹 What Jenkins Executes During Build
+Behind the scenes:
+
+mvn clean package
+JUnit tests are executed automatically.
+🔹 Expected Jenkins Console Output
+
+Running com.bnmit.GreatestNumberTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+Artifacts generated:
+
+target/sample-app-1.0-SNAPSHOT.jar
+✅ ✅ EXPERIMENT 14
+Measuring Code Coverage Using JaCoCo
+🔹 PART 1 – Create Maven Project
+
+mvn -version
+mvn archetype:generate -DgroupId=jar -DartifactId=Lab14-JaCoCo -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+cd Lab14-JaCoCo
+🔹 PART 2 – Run Tests with JaCoCo
+After adding JaCoCo plugin in pom.xml:
+
+mvn clean test
+This automatically:
+Runs JUnit tests
+Collects coverage data
+Generates report
+🔹 Generated Files
+Inside target/ folder:
+
+target/jacoco.exec
+target/site/jacoco/index.html
+🔹 Open Coverage Report
+Open in browser:
+
+target/site/jacoco/index.html
+🔹 Expected Output
+Terminal:
+
+Tests run: 3
+Failures: 0
+BUILD SUCCESS
+Coverage Report shows:
+Instruction Coverage %
+Branch Coverage %
+Line Coverage %
+Method Coverage %
+
+Exp15
+
+docker --version
+docker ps
+docker ps -a
+docker pull nginx
+docker run -d -p 8080:80 nginx
+docker run -d -p 8081:80 nginx
+docker ps
+docker stop <container_id>
+docker rm <container_id>
+docker ps
+
+Exp 16
+
+mkdir docker-app
+cd docker-app
+mkdir sample
+mkdir web
+cd sample
+notepad sample.py
+notepad Dockerfile
+docker build -t my-python-app .
+docker run my-python-app
+cd ..
+cd web
+notepad app.py
+notepad Dockerfile
+docker build -t my-python-web .
+docker run -p 5000:5020 my-python-web
+docker images
+docker ps
+docker ps -a
+
+Exp17
+docker run -d nginx
+docker ps
+docker run -d -p 8081:80 nginx
+docker volume create myvolume
+docker volume create dvolume
+docker volume ls
+docker run -it -v myvolume:/data ubuntu bash
+cd /data
+echo "Docker Volume Persistence Test" > test.txt
+exit
+docker run -it -v myvolume:/data ubuntu bash
+cat /data/test.txt
+exit
+docker run -d -p 8086:80 -v myvolume:/usr/share/nginx/html nginx
+docker run -it -v myvolume:/data ubuntu bash
+echo "<h1>Persistent Web Page</h1>" > /data/index.html
+exit
+docker run -d -p 8083:80 -v myvolume:/usr/share/nginx/html nginx
+docker images
+docker ps
+docker ps -a
+
+Exp18
+
+mkdir docker-java-app
+cd docker-java-app
+mkdir src
+notepad src\Grade.java
+notepad Dockerfile
+docker pull eclipse-temurin:17-jdk
+docker build -t my-java-app .
+docker images
+docker run my-java-app
+docker login
+docker tag my-java-app <dockerhub-username>/my-java-app:latest
+docker push <dockerhub-username>/my-java-app:latest
+docker pull <dockerhub-username>/my-java-app:latest
+docker run <dockerhub-username>/my-java-app:latest
+
+Exp19
+mkdir docker-java-app
+cd docker-java-app
+mkdir src
+notepad src\Grade.java
+notepad Dockerfile
+git init
+git add .
+git commit -m "Initial commit - Docker Java App"
+git branch -M main
+git remote add origin https://github.com/<username>/docker-java-app.git
+git push -u origin main
