@@ -1,0 +1,1006 @@
+Experiment 11: Writing Unit Tests using JUnit
+Aim
+To write a Java program and perform unit testing using JUnit framework and understand automated testing.
+________________________________________
+Prerequisites
+•	Java JDK (version 17 or above)
+•	Maven installed and configured
+•	Basic knowledge of Java programming
+•	IDE (VS Code / IntelliJ)
+•	Git and Jenkins (for automation)
+________________________________________
+Tools Required
+•	Java
+•	Maven
+•	JUnit 5
+•	GitHub
+•	Jenkins
+________________________________________
+Theory
+JUnit is a testing framework used for writing and running unit tests in Java. It helps in verifying the correctness of individual units of code. Maven is used for project management and dependency handling. Jenkins is a continuous integration tool used to automate build and testing processes.
+________________________________________
+Procedure
+Step 1: Create Maven Project
+Open terminal and run:
+mvn archetype:generate
+Provide the following details:
+•	GroupId: com.devops.lab
+•	ArtifactId: lab11-junit
+•	Packaging: jar
+•	Archetype: maven-archetype-quickstart
+Move to project directory:
+cd lab11-junit
+________________________________________
+Step 2: Create Java Class
+Create file:
+src/main/java/com/devops/lab/Calculator.java
+Write the program:
+package com.devops.lab;
+
+public class Calculator {
+
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int divide(int a, int b) {
+        if (b == 0) {
+            throw new IllegalArgumentException("Cannot divide by zero");
+        }
+        return a / b;
+    }
+}
+________________________________________
+Step 3: Add JUnit Dependency
+Open pom.xml and add:
+<dependencies>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.10.0</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.1.2</version>
+        </plugin>
+    </plugins>
+</build>
+________________________________________
+Step 4: Create Test Class
+Create file:
+src/test/java/com/devops/lab/CalculatorTest.java
+Write test cases:
+package com.devops.lab;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CalculatorTest {
+
+    Calculator calculator = new Calculator();
+
+    @Test
+    void testAddition() {
+        assertEquals(10, calculator.add(5, 5));
+    }
+
+    @Test
+    void testDivision() {
+        assertEquals(2, calculator.divide(10, 5));
+    }
+
+    @Test
+    void testDivideByZero() {
+        assertThrows(IllegalArgumentException.class,
+                () -> calculator.divide(10, 0));
+    }
+}
+________________________________________
+Step 5: Run Test Cases
+Execute the following command:
+mvn clean test
+Output:
+BUILD SUCCESS
+Tests run: 3
+Failures: 0
+________________________________________
+Step 6: GitHub Integration
+Initialize Git repository:
+git init
+git add .
+git commit -m "Initial commit"
+Create repository in GitHub and connect:
+git remote add origin <repository-url>
+git branch -M main
+git push -u origin main
+________________________________________
+Step 7: Jenkins Integration (Automation)
+1.	Open Jenkins dashboard
+2.	Install required plugins (Git, Maven, JUnit, Pipeline)
+3.	Configure JDK and Maven
+4.	Create new Pipeline project
+5.	Add Jenkinsfile in project
+Pipeline script:
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                bat 'mvn clean compile'
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'mvn test'
+            }
+        }
+    }
+
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+        }
+    }
+}
+6.	Build the pipeline and view test results
+________________________________________
+Result
+The Java program was successfully tested using JUnit. All test cases passed successfully. Automated testing was performed using Maven and Jenkins.
+________________________________________
+Conclusion
+JUnit testing ensures correctness of code by validating individual units. Integration with Jenkins enables automated testing, improving efficiency and reliability in software development.
+________________________________________
+Outcome
+Understanding of automated testing using JUnit and Jenkins was achieved.
+________________________________________
+
+
+Experiment 12: Running JUnit Tests with Maven/Gradle
+Aim:
+•	To configure Apache Maven and execute JUnit test cases on a Java application. 
+•	To understand Maven build lifecycle and automated test execution. 
+________________________________________
+Theory:
+•	Apache Maven is a build automation and project management tool for Java projects. It manages project dependencies, compilation, packaging, and testing through a pom.xml file. 
+•	Maven follows a standard directory structure:
+project-root/
+├─ src/main/java/   → Application source code
+├─ src/test/java/   → Test cases
+└─ pom.xml          → Project configuration
+•	JUnit is a unit testing framework for Java. Maven integrates with JUnit using plugins, automatically compiling and running test cases. 
+•	The Maven Surefire Plugin handles execution of unit tests and generates test reports. 
+________________________________________
+Procedure / Steps:
+Step 1: Verify Maven Installation
+•	Command:
+mvn -version
+•	Output confirms Maven is installed and environment variables are set. 
+________________________________________
+Step 2: Create a Maven Project
+•	Command:
+mvn archetype:generate
+maven-archetype-quickstart
+•	Enter project details: 
+o	groupId: com.bnmit 
+o	artifactId: sample-app 
+o	version: 1.0-SNAPSHOT 
+o	package: com.bnmit 
+•	Maven creates the standard project structure:
+sample-app/
+├─ src/main/java/com/bnmit/
+├─ src/test/java/com/bnmit/
+└─ pom.xml
+________________________________________
+Step 3: Navigate to Project Directory
+cd sample-app
+________________________________________
+Step 4: Build the Project
+•	Command:
+mvn package
+•	Compiles source code and generates a JAR file in the target folder. 
+•	Output: BUILD SUCCESS 
+________________________________________
+Step 5: Add Application Source Code
+•	File: src/main/java/com/bnmit/GreatestNumber.java 
+package com.bnmit;
+
+public class GreatestNumber {
+    public int findGreatest(int a, int b) {
+        return (a > b) ? a : b;
+    }
+}
+________________________________________
+Step 6: Add JUnit Test Case
+•	File: src/test/java/com/bnmit/GreatestNumberTest.java 
+package com.bnmit;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GreatestNumberTest {
+
+    @Test
+    void testGreatest() {
+        GreatestNumber obj = new GreatestNumber();
+        assertEquals(10, obj.findGreatest(10, 5));
+    }
+}
+________________________________________
+Step 7: Execute JUnit Tests
+•	Command: 
+mvn clean test
+•	Explanation: 
+o	clean removes previous builds. 
+o	test compiles and runs the test cases. 
+________________________________________
+Step 8: Verify Test Output
+•	Expected Result: 
+[INFO] Running com.bnmit.GreatestNumberTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+•	This confirms that the test case passed successfully. 
+________________________________________
+Step 9 (Optional): Test Failure Scenario
+•	Modify the test case expected value to force failure: 
+assertEquals(5, obj.findGreatest(10, 5));
+•	Run again: 
+mvn clean test
+•	Output: 
+[INFO] Tests run: 1, Failures: 1
+[INFO] BUILD FAILURE
+•	Demonstrates that Maven correctly reports failing test cases. 
+________________________________________
+Outcome:
+•	Maven successfully built the Java project and ran JUnit tests. 
+•	Students gain familiarity with: 
+o	Maven project structure and lifecycle. 
+o	Writing JUnit test cases. 
+o	Running automated tests and interpreting results. 
+
+Experiment 13: Integrating JUnit with Jenkins
+Tasks: Run JUnit tests in Jenkins and view reports
+Aim:
+•	To integrate JUnit testing with Jenkins and automate test execution using GitHub-based Continuous Integration (CI). 
+•	To understand how Jenkins, Maven, and GitHub work together to provide automated testing. 
+Outcome:
+•	CI-based testing using Jenkins. 
+•	Automated build and test execution triggered by GitHub commits. 
+________________________________________
+Theory:
+•	Jenkins is a Continuous Integration tool that automates building and testing of applications by integrating with version control systems like GitHub. 
+•	When code is pushed to GitHub, Jenkins can automatically fetch the latest code and execute JUnit tests using Maven. 
+•	This ensures continuous testing, faster feedback, and improved software reliability. 
+•	Maven is a build automation tool that can compile Java code, run JUnit tests, and package applications. 
+•	JUnit is a testing framework for unit testing Java applications. 
+•	Jenkins can archive build artifacts and display test results. 
+________________________________________
+Procedure / Steps
+Step 1: Prepare Maven Project and JUnit Test Case
+1.	Open command prompt and verify Maven installation:
+mvn -version
+2.	Create a Maven project using maven-archetype-quickstart:
+mvn archetype:generate -DgroupId=com.bnmit -DartifactId=sample-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+3.	Navigate into project folder:
+cd sample-app
+4.	Modify source code (GreatestNumber.java) in src/main/java/com/bnmit/ to find the greatest of two numbers:
+package com.bnmit;
+
+public class GreatestNumber {
+    public int findGreatest(int a, int b) {
+        return (a > b) ? a : b;
+    }
+}
+5.	Modify test code (GreatestNumberTest.java) in src/test/java/com/bnmit/ to validate the method:
+package com.bnmit;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GreatestNumberTest {
+
+    @Test
+    void testGreatest() {
+        GreatestNumber obj = new GreatestNumber();
+        assertEquals(10, obj.findGreatest(10, 5));
+    }
+}
+6.	Build and test the project locally:
+mvn clean test
+7.	Confirm BUILD SUCCESS and test results:
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+________________________________________
+Step 2: Push Project to GitHub
+1.	Create a new repository on GitHub named sample-app. 
+2.	Push the project files (pom.xml and src folder) to GitHub using Git:
+git init
+git add .
+git commit -m "Initial commit - Maven JUnit project"
+git branch -M main
+git remote add origin https://github.com/USERNAME/sample-app.git
+git push -u origin main
+________________________________________
+Step 3: Configure Maven in Jenkins
+1.	Go to Manage Jenkins → Global Tool Configuration → Maven. 
+2.	Add a new Maven installation: 
+o	Name: Maven-3.8.6 
+o	MAVEN_HOME: D:\apache-maven-3.8.6-bin\apache-maven-3.8.6 
+o	Uncheck “Install automatically” since Maven is already installed. 
+3.	Save configuration. 
+________________________________________
+Step 4: Create Jenkins Job for Maven Project
+1.	From Jenkins dashboard, click New Item → Maven Project. 
+2.	Enter job name: Junit-With-Jenkins. 
+3.	Under Source Code Management (SCM), select Git, and enter the GitHub repository URL. Add credentials if required. 
+4.	Enable Poll SCM to trigger builds on GitHub commits: * * * * * (optional for automatic builds). 
+5.	Under Build → Root POM, enter pom.xml. 
+6.	Under Goals and Options, enter package to compile and test. 
+7.	Under Post-build Actions → Archive the artifacts, enter target/*.jar. 
+8.	Click Save. 
+________________________________________
+Step 5: Build Jenkins Job and Verify Output
+1.	Click Build Now to trigger a build. 
+2.	Jenkins will: 
+o	Pull code from GitHub 
+o	Compile the project using Maven 
+o	Run JUnit tests 
+o	Archive the JAR file 
+Expected Jenkins Console Output:
+Running com.bnmit.GreatestNumberTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+Artifacts archived: target/sample-app-1.0-SNAPSHOT.jar
+________________________________________
+Conclusion:
+•	JUnit tests were successfully integrated with Jenkins. 
+•	Maven compiled the code and ran the unit tests automatically. 
+•	Jenkins provided a CI pipeline to fetch code from GitHub, execute tests, and archive build artifacts. 
+•	Continuous testing improves software reliability and provides immediate feedback. 
+
+Experiment 14 – Measuring Code Coverage Using JaCoCo with Maven
+________________________________________
+Aim
+To measure the code coverage of a Java project using JaCoCo in a Maven-based project and to generate an HTML report for visualization.
+________________________________________
+Apparatus / Software Required
+1.	Hardware: Any PC / Laptop with minimum 4 GB RAM 
+2.	Software / Tools: 
+o	JDK 17 or higher 
+o	Apache Maven 3.8 or higher 
+o	Visual Studio Code / Eclipse IDE 
+o	Browser (Chrome / Edge / Firefox) 
+o	Internet connection (for Maven dependencies) 
+________________________________________
+Theory
+Code coverage is a measure of how much of the source code is executed when tests run. It helps identify untested parts of code. JaCoCo (Java Code Coverage) is a widely used tool that integrates with Maven to produce coverage reports.
+•	Instructions Coverage: Measures which lines of code were executed. 
+•	Branch Coverage: Measures which decision branches (if/else) were executed. 
+•	Classes, Methods, Lines Coverage: Gives a high-level summary of coverage. 
+By integrating JaCoCo with Maven, we can automate code coverage measurement during JUnit test execution and generate reports in HTML format.
+________________________________________
+Prerequisites
+1.	Basic knowledge of Java and JUnit testing. 
+2.	Maven project with pom.xml properly configured. 
+3.	Ensure source code is inside a proper package, e.g., jar. 
+4.	JUnit test cases written for the classes to be tested. 
+________________________________________
+Project Setup
+1.	Create a Maven project, e.g., Lab14-JaCoCo. 
+2.	Directory structure: 
+Lab14-JaCoCo/
+├── pom.xml
+├── src/
+│   ├── main/java/jar/Calculator.java
+│   └── test/java/jar/CalculatorTest.java
+3.	Ensure the package declaration in Java files matches the folder structure: 
+package jar;
+________________________________________
+pom.xml Configuration
+Add the JaCoCo Maven plugin inside the <build> section:
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>0.8.11</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>prepare-agent</goal>
+          </goals>
+        </execution>
+        <execution>
+          <id>report</id>
+          <phase>test</phase>
+          <goals>
+            <goal>report</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+•	prepare-agent: Injects the JaCoCo agent for collecting coverage data. 
+•	report: Generates the coverage report after tests run. 
+________________________________________
+Steps to Perform the Experiment
+Step 1: Write Java Code
+Create a sample class Calculator.java:
+package jar;
+
+public class Calculator {
+    public int add(int a, int b) { return a + b; }
+    public int subtract(int a, int b) { return a - b; }
+    public int multiply(int a, int b) { return a * b; }
+}
+________________________________________
+Step 2: Write JUnit Test Cases
+Create CalculatorTest.java:
+package jar;
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+public class CalculatorTest {
+    Calculator calc = new Calculator();
+
+    @Test
+    public void testAdd() {
+        assertEquals(5, calc.add(2, 3));
+    }
+
+    @Test
+    public void testSubtract() {
+        assertEquals(2, calc.subtract(5, 3));
+    }
+
+    @Test
+    public void testMultiply() {
+        assertEquals(15, calc.multiply(5, 3));
+    }
+}
+________________________________________
+Step 3: Run Maven Commands
+1.	Open terminal in the project root folder. 
+2.	Execute: 
+mvn clean test
+Explanation:
+•	clean → deletes previous build artifacts. 
+•	test → runs JUnit tests and collects coverage data via JaCoCo. 
+•	JaCoCo creates jacoco.exec in target/. 
+________________________________________
+Step 4: Generate Coverage Report
+JaCoCo automatically generates an HTML report after test execution.
+•	Location: 
+target/site/jacoco/index.html
+•	Open in a browser to view coverage details. 
+________________________________________
+Step 5: Verify Report
+•	Coverage Summary: Total lines, methods, classes covered. 
+•	Red/Green Bars: Visual indicator of missed and covered instructions. 
+•	Package Drilldown: Click the package name (jar) to see line-by-line coverage. 
+Example from your run:
+•	Missed Instructions: 8 of 26 → coverage 69% 
+•	Missed Branches: 0 of 2 → coverage 100% 
+•	Missed Lines: 2 → coverage 6 
+This confirms JaCoCo collected coverage correctly.
+________________________________________
+Observation / Output
+•	Maven build logs indicate: BUILD SUCCESS. 
+•	Tests run: 3, Failures: 0, Errors: 0. 
+•	HTML report shows coverage metrics for your classes. 
+________________________________________
+Conclusion
+•	JaCoCo successfully integrated with Maven. 
+•	JUnit test execution generated coverage data. 
+•	HTML report provides clear visualization of tested and untested code. 
+•	Helps ensure higher code quality by identifying untested sections.
+
+
+
+
+Experiment 15: Introduction to Docker and Basic Commands
+________________________________________
+Aim
+•	To understand the basics of Docker. 
+•	To learn how to install Docker and run containers. 
+•	To explore container fundamentals such as images, running containers, stopping, and removing them. 
+________________________________________
+Theory
+•	Docker is a platform for developing, shipping, and running applications inside containers. 
+•	Container: A lightweight, isolated environment for running applications. 
+•	Docker Image: A read-only template containing an application, its dependencies, and runtime. 
+•	Docker Container: A running instance of an image. 
+•	Common commands: 
+o	docker pull → download an image from Docker Hub 
+o	docker run → run a container 
+o	docker ps → list running containers 
+o	docker ps -a → list all containers (including stopped ones) 
+o	docker stop → stop a running container 
+o	docker rm → remove a container 
+________________________________________
+Tools/Requirements
+•	Windows 10 (or above) 
+•	Docker Desktop installed 
+•	Internet connection (for pulling images) 
+•	CMD / PowerShell 
+________________________________________
+Procedure / Steps
+Step 1: Check Docker installation
+docker --version
+Output:
+Docker version 28.5.1, build e180ab8
+•	Confirms Docker is installed successfully. 
+________________________________________
+Step 2: List running containers
+docker ps
+Output (initially empty or error if Docker daemon not running):
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+________________________________________
+Step 3: List all containers (including stopped ones)
+docker ps -a
+Output (example):
+CONTAINER ID   IMAGE                  COMMAND                   CREATED        STATUS                    PORTS     NAMES
+3aa382d57833   hello-world            "/hello"                  5 months ago   Exited (0) 5 months ago             fervent_elbakyan
+________________________________________
+Step 4: Pull a Docker image
+docker pull nginx
+Output:
+latest: Pulling from library/nginx
+Status: Downloaded newer image for nginx:latest
+docker.io/library/nginx:latest
+•	Pulls the latest nginx web server image from Docker Hub. 
+________________________________________
+Step 5: Run a container
+docker run -d -p 8080:80 nginx
+•	-d → run container in detached mode 
+•	-p 8080:80 → maps host port 8080 to container port 80 
+Error Example:
+If port is already in use:
+docker: Error response from daemon: ports are not available ...
+Solution: Change host port:
+docker run -d -p 8081:80 nginx
+Output:
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS         PORTS                      NAMES
+8e3f11837f2d   nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8081->80/tcp   distracted_robinson
+________________________________________
+Step 6: Verify running container
+docker ps
+Output:
+CONTAINER ID   IMAGE     COMMAND                  CREATED        STATUS         PORTS                      NAMES
+8e3f11837f2d   nginx     "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8081->80/tcp   distracted_robinson
+•	Confirms the container is running. 
+•	You can access Nginx in browser: http://localhost:8081 
+________________________________________
+Step 7: Stop the container
+docker stop 8e3f11837f2d
+Output:
+8e3f11837f2d
+•	Container stops gracefully. 
+________________________________________
+Step 8: Remove the container
+docker rm 8e3f11837f2d
+Output:
+8e3f11837f2d
+•	Container is removed from the system. 
+________________________________________
+Step 9: Verify no containers are running
+docker ps
+Output:
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+•	Confirms no running containers. 
+________________________________________
+Observations
+•	Docker images can be pulled from Docker Hub. 
+•	Containers can be started, stopped, and removed easily. 
+•	Port mapping allows access to container services from the host. 
+•	Docker daemon must be running for all commands to work. 
+________________________________________
+Conclusion
+•	Successfully learned Docker installation verification, image pulling, container running, stopping, and removing. 
+•	Understood the basics of Docker images and containers. 
+•	Learned to use essential Docker commands: docker ps, docker run, docker stop, docker rm, and docker pull. 
+•	Completed hands-on container management using the Nginx web server. 
+
+
+Experiment 16: Creating Docker Images using Dockerfile
+________________________________________
+Aim
+•	To understand what a Docker image is. 
+•	To learn how to create Docker images using a Dockerfile. 
+•	To build and run custom Docker containers. 
+•	To explore application containerization using Python programs. 
+________________________________________
+Theory
+•	Docker Image: A read-only template containing application code, runtime, libraries, and dependencies. Images are used to create containers. 
+•	Docker Container: A running instance of a Docker image. Containers are isolated, lightweight, and portable. 
+•	Dockerfile: A text file containing instructions to build a Docker image. Each instruction creates a layer in the image. 
+Common Dockerfile instructions:
+Instruction	Purpose
+FROM	Base image
+WORKDIR	Set working directory inside container
+COPY	Copy files into image
+RUN	Execute commands during build
+EXPOSE	Open port
+CMD	Default command to run container
+Flow:
+Dockerfile → Docker Image → Docker Container → Output
+________________________________________
+Tools / Requirements
+•	Windows 10 or later 
+•	Docker Desktop installed 
+•	CMD / PowerShell 
+•	Python 3.9-slim base image 
+________________________________________
+Procedure / Steps
+Step 1 — Create project folders and Python files
+mkdir docker-app
+cd docker-app
+mkdir sample
+mkdir web
+Folder structure:
+docker-app/
+│
+├── sample/
+│   ├── sample.py       # Simple print program
+│   └── Dockerfile
+│
+└── web/
+    ├── app.py          # Python web server
+    └── Dockerfile
+Python files content:
+•	sample.py: 
+print("Hello from Docker container!")
+•	app.py: 
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+
+PORT = 5020
+
+class MyHandler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(b"<h1>Hello from Docker Python Container</h1>")
+
+server = HTTPServer(("0.0.0.0", PORT), MyHandler)
+print(f"Server running on port {PORT}...")
+server.serve_forever()
+________________________________________
+Step 2 — Create Dockerfiles
+•	Dockerfile for sample.py: 
+FROM python:3.9-slim
+WORKDIR /app
+COPY sample.py .
+CMD ["python", "sample.py"]
+•	Dockerfile for app.py (web server): 
+FROM python:3.9-slim
+WORKDIR /app
+COPY app.py .
+EXPOSE 5020
+CMD ["python", "app.py"]
+________________________________________
+Step 3 — Build Docker images
+3.1 Build image for sample.py:
+cd C:\Users\HP\docker-app\sample
+docker build -t my-python-app .
+3.2 Build image for app.py:
+cd ..\web
+docker build -t my-python-web .
+Output (example for my-python-app):
+[+] Building 45.2s (8/8) FINISHED
+ => [1/3] FROM python:3.9-slim
+ => [2/3] WORKDIR /app
+ => [3/3] COPY sample.py .
+ => exporting to image
+ => => naming to docker.io/library/my-python-app:latest
+________________________________________
+Step 4 — Run Docker containers
+4.1 Run sample.py container:
+docker run my-python-app
+Expected output:
+Hello from Docker container!
+•	Container runs the script and exits automatically. 
+4.2 Run app.py container (Web Server):
+docker run -p 5000:5020 my-python-web
+•	Maps host port 5000 to container port 5020 
+•	Open browser: http://localhost:5000 
+Output (CMD log example):
+172.17.0.1 - - [08/Apr/2026 17:37:40] "GET / HTTP/1.1" 200 -
+Server running on port 5020...
+•	The web server keeps running until manually stopped (Ctrl+C). 
+________________________________________
+Step 5 — Verify Docker images and containers
+List images:
+docker images
+Example output:
+REPOSITORY      TAG       IMAGE ID       CREATED         SIZE
+my-python-web   latest    20aa637c0784   3 minutes ago   183MB
+my-python-app   latest    41b4a7329098   4 minutes ago   183MB
+List running containers:
+docker ps
+List all containers (running + exited):
+docker ps -a
+________________________________________
+Observations
+•	Docker images were successfully created from Dockerfiles. 
+•	Containers for sample.py and app.py ran successfully. 
+•	Port mapping allowed accessing the Python web server from the host browser. 
+•	Images can be reused to create multiple containers without rebuilding. 
+________________________________________
+Conclusion
+•	Successfully created and ran Docker images using Dockerfiles. 
+•	Learned the process of application containerization: writing Dockerfile → building image → running container. 
+•	Learned key Docker commands: docker build, docker run, docker ps, docker images. 
+•	Completed hands-on experience in containerizing Python applications.
+
+Experiment 17: Docker Volumes and Port Mapping
+Aim:
+•	To understand Docker volumes and how to persist data using volumes. 
+•	To learn port mapping for accessing container services from the host machine. 
+Tasks:
+•	Map ports of containers to the host machine. 
+•	Use Docker volumes to persist data across containers. 
+Outcome:
+•	Knowledge of data persistence using Docker volumes. 
+•	Ability to access container services through mapped host ports. 
+________________________________________
+Theory
+•	Docker Volume: A mechanism to store data outside the container filesystem. Volumes allow data to persist even after containers are stopped or deleted. 
+•	Port Mapping: Maps container ports to host ports using the -p flag (host_port:container_port). This allows accessing container services (like web servers) from the host machine. 
+________________________________________
+Procedure / Working Steps
+Step 1: Run a basic Nginx container
+docker run -d nginx
+•	This starts an Nginx container in detached mode. 
+•	Check running containers: 
+docker ps
+________________________________________
+Step 2: Map Nginx container port to host
+docker run -d -p 8081:80 nginx
+•	Maps container port 80 to host port 8081. 
+•	Access via browser: http://localhost:8081. 
+________________________________________
+Step 3: Create Docker volumes
+docker volume create myvolume
+docker volume create dvolume
+•	Check created volumes: 
+docker volume ls
+•	Volumes will be used for persistent storage. 
+________________________________________
+Step 4: Test volume persistence with Ubuntu container
+docker run -it -v myvolume:/data ubuntu bash
+•	Inside the container: 
+cd /data
+echo "Docker Volume Persistence Test" > test.txt
+exit
+•	Verify persistence by re-running container: 
+docker run -it -v myvolume:/data ubuntu bash
+cat /data/test.txt
+Expected Output:
+Docker Volume Persistence Test
+________________________________________
+Step 5: Map volume to Nginx HTML folder
+docker run -d -p 8086:80 -v myvolume:/usr/share/nginx/html nginx
+•	Maps volume myvolume to Nginx’s default HTML folder. 
+•	Any HTML file added to myvolume will be served by Nginx. 
+________________________________________
+Step 6: Add a persistent web page
+docker run -it -v myvolume:/data ubuntu bash
+echo "<h1>Persistent Web Page</h1>" > /data/index.html
+exit
+________________________________________
+Step 7: Run Nginx container serving the persistent page
+docker run -d -p 8083:80 -v myvolume:/usr/share/nginx/html nginx
+•	Open browser: http://localhost:8083 
+•	Expected Output: 
+Persistent Web Page
+________________________________________
+Step 8: Verify Images and Containers
+docker images         # Lists all images
+docker ps             # Lists running containers
+docker ps -a          # Lists all containers (running + exited)
+________________________________________
+Observations
+•	The text file test.txt and index.html persisted across containers using myvolume. 
+•	Port mapping allows accessing Nginx web pages from host machine. 
+•	Data in volumes is independent of container lifecycle. 
+________________________________________
+Conclusion
+•	Docker volumes successfully persist data beyond container lifetime. 
+•	Port mapping enables services inside containers to be accessed externally. 
+•	Experiment demonstrates practical container data management and networking concepts.
+
+Experiment 18: Docker Image Push to Docker Hub
+Aim:
+To understand how to push a Docker image to Docker Hub for distribution and reusability.
+Tasks:
+1.	Create a Java project (Grade.java). 
+2.	Write a Dockerfile to containerize the Java application. 
+3.	Build the Docker image. 
+4.	Push the image to Docker Hub. 
+Outcome:
+Gain knowledge of Docker image distribution and using Docker Hub to share containerized applications.
+________________________________________
+Step 1 — Create Project Folder
+C:\Users\HP> mkdir docker-java-app
+C:\Users\HP> cd docker-java-app
+C:\Users\HP\docker-java-app> mkdir src
+Place your Java file (Grade.java) inside the src folder:
+Grade.java (example):
+public class Grade {
+    public static void main(String[] args) {
+        System.out.println("Grade: A");
+    }
+}
+________________________________________
+Step 2 — Create Dockerfile
+Navigate to the project root (docker-java-app) and create a Dockerfile:
+C:\Users\HP\docker-java-app> type nul > Dockerfile
+Dockerfile content:
+# Use Eclipse Temurin OpenJDK 17 as base image
+FROM eclipse-temurin:17-jdk
+
+# Set working directory
+WORKDIR /app
+
+# Copy Java source code into container
+COPY src/Grade.java .
+
+# Compile Java code
+RUN javac Grade.java
+
+# Command to run the Java program
+CMD ["java", "Grade"]
+________________________________________
+Step 3 — Pull Base Image (Optional)
+C:\Users\HP\docker-java-app> docker pull eclipse-temurin:17-jdk
+________________________________________
+Step 4 — Build Docker Image
+C:\Users\HP\docker-java-app> docker build -t my-java-app .
+Explanation:
+•	-t my-java-app → tags the image as my-java-app. 
+•	. → current directory contains the Dockerfile. 
+Check that the image is created:
+C:\Users\HP\docker-java-app> docker images
+________________________________________
+Step 5 — Run Container Locally
+C:\Users\HP\docker-java-app> docker run my-java-app
+Expected Output:
+Grade: A
+________________________________________
+Step 6 — Log in to Docker Hub
+C:\Users\HP\docker-java-app> docker login
+•	Follow web-based login or use docker login -u <username> with credentials. 
+________________________________________
+Step 7 — Tag Image for Docker Hub
+C:\Users\HP\docker-java-app> docker tag my-java-app <dockerhub-username>/my-java-app:latest
+Example:
+C:\Users\HP\docker-java-app> docker tag my-java-app arathivenkatesh/my-java-app:latest
+________________________________________
+Step 8 — Push Image to Docker Hub
+C:\Users\HP\docker-java-app> docker push arathivenkatesh/my-java-app:latest
+•	Wait until all layers are uploaded. 
+•	Check Docker Hub repository to confirm the image is available. 
+________________________________________
+Step 9 — Pull Image on Another System
+On any system with Docker:
+docker pull arathivenkatesh/my-java-app:latest
+docker run arathivenkatesh/my-java-app
+Expected Output:
+Grade: A
+This ensures the image is reusable without copying project files manually.
+________________________________________
+Folder Structure After Experiment
+docker-java-app/
+│
+├── src/
+│   └── Grade.java
+└── Dockerfile
+________________________________________
+✅ Key Points Learned:
+1.	Dockerfile creation for a Java application. 
+2.	Building and running Docker images. 
+3.	Tagging images for Docker Hub. 
+4.	Pushing and pulling images from Docker Hub.
+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
+
+Experiment 19: Jenkins and Docker Integration
+Aim:
+To build a Docker image and run a Docker container automatically using Jenkins, demonstrating CI/CD integration skills.
+________________________________________
+Requirements / Prerequisites:
+•	Installed Jenkins server on Windows. 
+•	Docker Desktop installed and running. 
+•	GitHub repository containing the project (docker-java-app) with Dockerfile and src/Grade.java. 
+•	Jenkins user with GitHub access credentials (token or username/password). 
+________________________________________
+Project Setup:
+1.	Create project directory locally:
+mkdir docker-java-app
+cd docker-java-app
+mkdir src
+2.	Add Java file:
+Place Grade.java inside src folder:
+public class Grade {
+    public static void main(String[] args) {
+        System.out.println("Grade: A");
+    }
+}
+3.	Create Dockerfile:
+type nul > Dockerfile
+Dockerfile content:
+# Use Eclipse Temurin JDK base image
+FROM eclipse-temurin:17-jdk
+
+# Set working directory in container
+WORKDIR /app
+
+# Copy Java source file into container
+COPY src/Grade.java .
+
+# Compile Java file
+RUN javac Grade.java
+
+# Set default command to run the compiled Java program
+CMD ["java", "Grade"]
+4.	Push code to GitHub:
+git init
+git add .
+git commit -m "Initial commit - Docker Java App"
+git branch -M main
+git remote add origin https://github.com/ArathiVenkatesh/docker-java-app.git
+git push -u origin main
+________________________________________
+Jenkins Setup and Configuration:
+1.	Create a new Jenkins Job: 
+o	Select Free Style Project 
+o	Name: Docker-Integration-With-Jenkins 
+2.	General Settings: 
+o	Add description (optional) 
+o	Configure Discard old builds (keep last 5 builds) 
+3.	Source Code Management (SCM): 
+o	Select Git 
+o	Repository URL: https://github.com/ArathiVenkatesh/docker-java-app.git 
+o	Credentials: Add GitHub token or username/password 
+o	Branch Specifier: */main 
+4.	Build Triggers (optional for automatic builds): 
+o	Poll SCM → e.g., * * * * * (every minute for testing) 
+o	Or GitHub hook trigger for GITScm polling 
+5.	Build Steps: 
+o	Add Execute Windows batch command:
+docker build -t my-java-app .
+docker run -d --rm my-java-app
+6.	Post-build Actions (optional): 
+o	Send notifications or archive artifacts 
+________________________________________
+Execution:
+1.	Click Build Now in Jenkins. 
+2.	Jenkins pulls the project from GitHub. 
+3.	Docker image is built using the Dockerfile in the repository. 
+4.	Docker container runs automatically in detached mode. 
+________________________________________
+Observed Output in Jenkins Console:
+•	Git clone successful:
+Checking out Revision bdd3d0fe38037620ae4f7a8911da64c165528079
+•	Docker build successful:
+#9 naming to docker.io/library/my-java-app:latest
+•	Docker run successful:
+05bb5eb9d0e2e7ee7c461c0ce5da3513050c21929d954e4a7203e02319404430
+•	Build completed successfully:
+Finished: SUCCESS
+________________________________________
+Conclusion / Outcome:
+•	Jenkins successfully integrated with Docker. 
+•	Automated build and run of Docker image from GitHub repository. 
+•	Demonstrated CI/CD skills by connecting Jenkins, GitHub, and Docker. 
+•	This setup can now be used to automatically build and deploy projects whenever code is pushed to GitHub. 
+
+
+
